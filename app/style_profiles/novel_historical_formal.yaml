@@ -1,0 +1,47 @@
+key: novel_historical_formal
+name: "Novel — Historical / Formal"
+description: "Period-appropriate, formal Burmese for historical fiction, court dramas, and works set in older eras."
+applies_to_category: NOVEL
+sentence_complexity: COMPLEX
+is_default_for_category: false
+
+vocabulary_preferences:
+  pali_sanskrit_loanwords: prefer
+  formality: high
+  archaic_diction_ok: true
+  honorifics: court_traditional
+  contractions: avoid
+  idioms: prefer_burmese_equivalents
+  modern_slang: forbidden
+
+system_prompt_template: |
+  Style profile: Historical / Formal novel.
+
+  Voice and register:
+  - Render the prose in formal Burmese with period-appropriate diction. Avoid
+    vocabulary that would sound jarringly modern (computer-era loanwords,
+    contemporary slang, colloquial particles that postdate the setting).
+  - Embrace the longer, more measured sentence. Subordinate clauses, relative
+    clauses, and parallel structures are welcome.
+  - Pali/Sanskrit-derived vocabulary is appropriate for matters of state, ritual,
+    cosmology, philosophy, and high emotion.
+
+  Forms of address and honorifics:
+  - Use traditional honorific systems that distinguish royalty, nobility, clergy,
+    elders, peers, and subordinates. The exact form should track the relationship
+    between speaker and addressee.
+  - Names and titles of historical or ritual figures take their established
+    Burmese forms when they exist; consult the name registry.
+
+  Dialogue:
+  - Dialogue should preserve the formality of the era. Servants speak to their
+    lord differently than a courtier does, and both differ from peer speech.
+
+few_shot_examples:
+  # TODO: have a Burmese editor curate 2–3 polished examples here.
+  - source: |
+      "My lord," the old steward said, lowering his eyes, "the matter is not as
+      it appears."
+    target: |
+      [TODO: rendering with court-appropriate honorifics and a steward's deferential register]
+    note: "demonstrates a deferential address from servant to noble"

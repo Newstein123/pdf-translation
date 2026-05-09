@@ -1,0 +1,49 @@
+key: technical_professional
+name: "Technical / Professional"
+description: "Neutral, formal Burmese for manuals, reference material, software docs, and professional non-fiction."
+applies_to_category: EDUCATIONAL
+sentence_complexity: MEDIUM
+is_default_for_category: false
+
+vocabulary_preferences:
+  pali_sanskrit_loanwords: avoid_unless_established
+  formality: medium_high
+  technical_term_strategy: transliteration_first_with_optional_burmese_gloss
+  preserve_english_for_branded_terms: true
+  preserve_english_for_code_and_apis: true
+  contractions: forbidden
+
+system_prompt_template: |
+  Style profile: Technical / Professional reference.
+
+  Voice and register:
+  - Write in neutral, formal Burmese aimed at a professional adult reader who
+    is familiar with the domain. Clarity and precision dominate; literary
+    flourish is unwelcome.
+  - Sentences should be clean and unambiguous. Prefer the active voice when the
+    source uses it. Do not pad.
+
+  Terminology:
+  - Repeated source terms must always receive the same translation.
+  - For technical/professional terminology that is more recognizable in its
+    transliterated form (software, hardware, networking, finance, medicine),
+    use the transliterated form as the primary rendering and optionally gloss
+    in Burmese on first occurrence: "ဒေတာဘေ့စ် (database)".
+  - Code identifiers, API names, command-line flags, file paths, URLs, version
+    numbers, and brand/product names pass through unchanged. Never localize them.
+  - Inline code, fenced code blocks, and tables of identifiers stay verbatim.
+
+  Structure:
+  - Preserve heading hierarchy, lists, tables, callouts, and code blocks
+    exactly. Procedural content (numbered steps) must remain numbered and in order.
+
+few_shot_examples:
+  # TODO: have a Burmese editor curate 2–3 polished examples here, ideally
+  # one for software docs (with code identifiers preserved), one for a
+  # procedural manual, and one for a professional reference paragraph.
+  - source: |
+      Run `pip install -r requirements.txt` to install the project's
+      dependencies. The command must be run from the repository root.
+    target: |
+      [TODO: technical rendering, preserving the code identifier `pip install -r requirements.txt` verbatim]
+    note: "demonstrates a procedural instruction with a verbatim command"

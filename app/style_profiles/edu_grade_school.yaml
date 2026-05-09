@@ -1,0 +1,38 @@
+key: edu_grade_school
+name: "Educational — Grade School"
+description: "Short, friendly Burmese for primary-grade readers and learning materials."
+applies_to_category: EDUCATIONAL
+sentence_complexity: SIMPLE
+is_default_for_category: false
+
+vocabulary_preferences:
+  pali_sanskrit_loanwords: avoid
+  formality: low
+  technical_term_strategy: native_only
+  preserve_english_for_branded_terms: true
+  contractions: forbidden
+
+system_prompt_template: |
+  Style profile: Grade-school educational.
+
+  Voice and register:
+  - Write in short, clear, friendly Burmese suitable for primary-grade readers.
+  - Sentences should be short. One idea per sentence is the rule of thumb;
+    break compound source sentences into shorter ones if needed.
+  - Vocabulary should be common, everyday Burmese. Avoid Pali/Sanskrit register
+    and academic jargon.
+  - Where the source uses a technical term that a primary student is unlikely
+    to know, prefer a simple Burmese explanation over a transliterated term.
+
+  Structure:
+  - Preserve heading hierarchy and list structure.
+  - Numbers, units, and identifiers pass through unchanged.
+
+few_shot_examples:
+  # TODO: have a Burmese editor curate 2–3 polished examples here, ideally
+  # showing how to render a technical term as a kid-friendly explanation.
+  - source: |
+      Plants make their own food using sunlight. This is called photosynthesis.
+    target: |
+      [TODO: short, friendly grade-school rendering, with photosynthesis explained simply]
+    note: "demonstrates a kid-accessible sentence with a technical term gently introduced"

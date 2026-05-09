@@ -1,0 +1,64 @@
+key: novel_literary
+name: "Novel — Literary / Classical"
+description: "Elevated, classical Burmese prose for serious literary fiction. Default for NOVEL."
+applies_to_category: NOVEL
+sentence_complexity: COMPLEX
+is_default_for_category: true
+
+vocabulary_preferences:
+  pali_sanskrit_loanwords: prefer
+  formality: high
+  archaic_diction_ok: true
+  honorifics: traditional
+  contractions: avoid
+  idioms: prefer_burmese_equivalents
+
+system_prompt_template: |
+  Style profile: Literary / Classical novel.
+
+  Voice and register:
+  - Aim for elevated, considered Burmese prose with literary cadence and rhythm.
+  - Favor the longer, more deliberate sentence when the source allows it; classical
+    Burmese welcomes embedded clauses where modern English would punch.
+  - Lean on Pali/Sanskrit-derived vocabulary for abstract concepts (emotion,
+    morality, time, fate) where it raises the register without sounding ornamental.
+  - Preserve metaphor, simile, and rhetorical figures. Do not flatten into plain prose.
+  - Honorifics and forms of address should reflect the social hierarchy of the
+    source; render them in their traditional Burmese forms.
+
+  Dialogue:
+  - Distinguish characters by speech register (formal vs. familiar, learned vs.
+    plain) — the *difference* matters more than literal word choice.
+  - Avoid contemporary slang and English-influenced syntax in dialogue, even when
+    the source dialogue is colloquial.
+
+few_shot_examples:
+  - source: |
+      She stood at the window and watched the rain drift sideways across the
+      garden, thinking of nothing in particular and yet of everything at once.
+    target: |
+      သူမသည် ပြတင်းပေါက်အနီးတွင် ရပ်လျက်၊ ဥယျာဉ်ကိုဖြတ်၍ စောင်းငဲ့ကျနေသော မိုးရေပေါက်တို့ကို ငေးကြည့်နေ၏။ စိတ်တွင် တိတိကျကျတော့ ဘာတစ်ခုမျှ မရှိ၊ သို့သော် တပြိုင်နက်တည်း အရာအားလုံးကိုပင် တွေးမိနေသဖြင့်တည်း။
+    note: |
+      Reflective interior prose: literary register throughout. ၏ closer,
+      လျက် / သဖြင့် connectives, suspended single-sentence rhythm. No
+      contractions or spoken markers — this is narration, not speech.
+  - source: |
+      Edam said, "You're really angry. Let's continue tomorrow."
+    target: |
+      "မင်းအရမ်းစိတ်တိုနေတယ်။ နောက်နေ့မှ ဆက်ပြောရအောင်" ဟု အီဒမ်က ဆိုလိုက်၏။
+    note: |
+      The CRITICAL pattern: literary novels still render dialogue in spoken
+      Burmese. Inside the quotes — peer-to-peer မင်း, spoken တယ် ending,
+      everyday စိတ်တို (NOT သင်/သည်/ဒေါသထွက်). Outside the quotes — literary
+      narration tag with ဟု … ဆိုလိုက်၏. Spoken inside, literary outside.
+  - source: |
+      "Forgive me, sir," the young man said, lowering his eyes. "I did not
+      know it was your house."
+    target: |
+      "ခွင့်လွှတ်ပါ ဆရာ" ဟု လူငယ်က မျက်နှာငုံ့လျက် ပြောလိုက်၏။ "ခင်ဗျားရဲ့အိမ် မှန်းမသိခဲ့မိပါ"။
+    note: |
+      Rank/register cue inside dialogue: junior-to-senior politeness uses
+      ခင်ဗျား and ဆရာ (not မင်း), and the သုံးပါ "please" register.
+      Narration tag stays literary (၏). The *difference* between this and
+      the peer-dialogue example above is what register-faithful translation
+      means in a literary novel.

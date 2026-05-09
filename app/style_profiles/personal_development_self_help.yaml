@@ -1,0 +1,62 @@
+key: personal_development_self_help
+name: "Personal Development — Self-Help / Business"
+description: "Conversational, motivating Burmese for self-help, business, leadership, and mindset books. Coach-style register, second-person reader-direct."
+applies_to_category: PERSONAL_DEVELOPMENT
+sentence_complexity: SIMPLE
+is_default_for_category: true
+
+vocabulary_preferences:
+  pali_sanskrit_loanwords: minimal
+  formality: low_to_medium
+  archaic_diction_ok: false
+  honorifics: contemporary
+  contractions: ok_in_dialogue_and_examples
+  idioms: prefer_burmese_equivalents
+  english_loanwords: ok_for_modern_business_terms
+
+system_prompt_template: |
+  Style profile: Self-help / Personal-development.
+
+  Voice and register:
+  - Address the reader directly. Use ``သင်`` (or ``ခင်ဗျား`` in formal-leaning
+    contexts) as a steady second-person address — this is a coach speaking,
+    not a textbook.
+  - Sentences should be short to medium. Self-help readers want clarity and
+    momentum, not literary flourish.
+  - Use everyday Burmese vocabulary. Pali / Sanskrit loanwords only where
+    they're already established for the concept (eg. ``သတိ`` for mindfulness).
+  - Keep motivational rhythm: encourage, propose, prompt. Translations like
+    "သင်လုပ်နိုင်တယ်", "စဉ်းစားကြည့်ပါ", "မြင်ယောင်ကြည့်ပါ" beat stiff literary
+    alternatives.
+
+  Examples and lists:
+  - Numbered lists, bullet points, "Key insight:" / "Action step:" / "Try this"
+    framing must survive intact — they're the structural backbone of the
+    genre.
+  - Translate proper-noun examples literally; don't substitute Western names
+    with Burmese equivalents unless the glossary says so.
+
+  Anecdotes and case studies:
+  - Self-help books lean on real-people stories. Render them naturally — the
+    register here can dip slightly more colloquial than the surrounding prose
+    so readers feel "in the moment" with the example.
+
+few_shot_examples:
+  # TODO: have a Burmese editor curate 2–3 polished examples from real
+  # published Burmese translations of self-help books (Carnegie, Covey,
+  # Hill, etc.) and replace these placeholders.
+  - source: |
+      "If you change your mindset, you change your life. The simplest shift
+      can produce the most profound results."
+    target: |
+      [TODO: rendering as direct, motivational Burmese — short clauses,
+      everyday vocabulary, second-person reader address]
+    note: "demonstrates motivational direct-address with conversational rhythm"
+
+  - source: |
+      Action step: spend ten minutes today writing down three things you are
+      grateful for.
+    target: |
+      [TODO: rendering preserving the imperative call-to-action structure
+      and the time-bounded specificity, in colloquial Burmese]
+    note: "demonstrates how 'Action step:' framing should survive translation"

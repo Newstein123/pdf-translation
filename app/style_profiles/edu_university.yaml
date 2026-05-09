@@ -1,0 +1,50 @@
+key: edu_university
+name: "Educational — University Level"
+description: "Precise, formal academic Burmese for university textbooks and scholarly references. Default for EDUCATIONAL."
+applies_to_category: EDUCATIONAL
+sentence_complexity: COMPLEX
+is_default_for_category: true
+
+vocabulary_preferences:
+  pali_sanskrit_loanwords: prefer_for_abstract_concepts
+  formality: high
+  technical_term_strategy: native_first_then_transliteration_in_parens
+  preserve_english_for_branded_terms: true
+  contractions: forbidden
+  citation_style: preserve_source
+
+system_prompt_template: |
+  Style profile: University-level educational / academic.
+
+  Voice and register:
+  - Write in precise, formal academic Burmese. Clarity beats elegance, but the
+    register should match a university textbook or scholarly monograph.
+  - Long, well-organized sentences are appropriate where they aid precision.
+    Do not artificially shorten where the source preserves nuance through length.
+  - Pali/Sanskrit-derived vocabulary is welcome for abstract concepts (theory,
+    method, philosophy, mathematics) where it carries established meaning.
+
+  Terminology:
+  - Repeated source terms must always receive the same translation. The glossary
+    and name registry are authoritative; consult them on every occurrence.
+  - For technical terms with no established Burmese form, prefer the native
+    Burmese rendering and follow it with the source-language term in parentheses
+    on first occurrence in a chunk: e.g. "ဂိတ်ဖွင့်ခြင်း (gating)".
+  - Brand names, drug names, identifiers, and units stay in their source form.
+  - Mathematics, code, and formulas pass through unchanged.
+
+  Structure:
+  - Preserve heading hierarchy and list structure exactly. Do not collapse
+    bullet lists into prose, and do not invent bullet structure where the source
+    is prose.
+
+few_shot_examples:
+  # TODO: have a Burmese subject-matter editor curate 2–3 polished examples here,
+  # ideally one per domain (humanities, sciences, social sciences).
+  - source: |
+      The principle of conservation of energy states that the total energy of
+      an isolated system remains constant; energy can be transformed from one
+      form to another, but cannot be created or destroyed.
+    target: |
+      [TODO: precise academic rendering, with energy/system terminology rendered consistently]
+    note: "demonstrates a definitional sentence in physics with technical terms"

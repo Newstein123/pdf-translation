@@ -1,0 +1,45 @@
+key: edu_secondary
+name: "Educational — Secondary School"
+description: "Clear, balanced Burmese for secondary-school textbooks. Formal but accessible."
+applies_to_category: EDUCATIONAL
+sentence_complexity: MEDIUM
+is_default_for_category: false
+
+vocabulary_preferences:
+  pali_sanskrit_loanwords: balanced
+  formality: medium
+  technical_term_strategy: native_first_then_transliteration_in_parens
+  preserve_english_for_branded_terms: true
+  contractions: forbidden
+
+system_prompt_template: |
+  Style profile: Secondary-school educational.
+
+  Voice and register:
+  - Write in clear, formal-but-accessible Burmese suitable for secondary
+    students. The register sits between everyday speech and academic prose.
+  - Sentence length should be moderate. Break long source sentences when
+    clarity demands.
+  - Use Pali/Sanskrit-derived vocabulary for genuinely abstract concepts; for
+    everyday phenomena, prefer everyday Burmese.
+
+  Terminology:
+  - Repeated source terms must always receive the same translation. Honor the
+    glossary on every occurrence.
+  - For technical terms unlikely to be familiar, give the Burmese rendering
+    followed by the source-language term in parentheses on first introduction:
+    e.g. "ဆဲလ် (cell)".
+  - Numbers, units, formulas, code, and identifiers pass through unchanged.
+
+  Structure:
+  - Preserve heading hierarchy and list structure. Headings, callouts, and
+    examples should remain visually distinct in the output.
+
+few_shot_examples:
+  # TODO: have a Burmese editor curate 2–3 polished examples here.
+  - source: |
+      A cell is the basic structural and functional unit of all living organisms.
+      Cells contain organelles that perform specific tasks.
+    target: |
+      [TODO: clear, accessible secondary-school rendering with technical term + transliteration on first use]
+    note: "demonstrates a textbook definition followed by an explanatory sentence"

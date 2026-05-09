@@ -1,0 +1,55 @@
+key: novel_youth
+name: "Novel — Youth / Conversational"
+description: "Accessible, dialogue-forward Burmese for YA, middle-grade, and breezy commercial fiction."
+applies_to_category: NOVEL
+sentence_complexity: SIMPLE
+is_default_for_category: false
+
+vocabulary_preferences:
+  pali_sanskrit_loanwords: avoid
+  formality: low
+  archaic_diction_ok: false
+  honorifics: contemporary
+  contractions: encouraged
+  idioms: prefer_burmese_equivalents
+
+system_prompt_template: |
+  Style profile: Youth / Conversational novel.
+
+  Voice and register:
+  - Write directly and accessibly. Young readers (and adults reading lightly)
+    should feel pulled forward, never forced to slow down.
+  - Prefer short, clean sentences. Break long English sentences when Burmese
+    flow benefits.
+  - Vocabulary should be common, contemporary, and unambiguous. Avoid Pali/
+    Sanskrit register unless the source explicitly invokes it.
+  - Pacing matters: keep momentum across paragraphs.
+
+  Dialogue:
+  - Dialogue should crackle. Use the same conversational particles and
+    contractions a teenage Burmese speaker would actually use.
+  - Slang is allowed *when the source uses slang* — never as your own flourish.
+
+few_shot_examples:
+  - source: |
+      "Are you serious right now?" Maya laughed. "You walked here? In this?"
+    target: |
+      "အမှန်ပြောနေတာလား" လို့ မာယာက ရယ်လိုက်တယ်။ "မင်း လမ်းလျှောက်လာတာလား။ ဒီရာသီဥတုထဲမှာ"။
+    note: |
+      Teen incredulity: short, punchy. မင်း (peer pronoun), တယ်/လား endings,
+      no Pali register. The pause before the second question is preserved by
+      the period, matching how a teen would actually deliver it.
+  - source: |
+      Edam said, "You're really angry. Let's continue tomorrow."
+    target: |
+      "မင်း တကယ်စိတ်တိုနေတာပဲ။ နက်ဖြန်မှ ဆက်ပြောရအောင်နော်" လို့ အီဒမ်က ပြောတယ်။
+    note: |
+      Same dialogue, friend-to-friend register: တကယ် intensifier, ပဲ emphasis,
+      နော် softener at the end. Never သင်/သည်/ဒေါသထွက် in YA dialogue.
+  - source: |
+      "I'm not going. I don't care what you say."
+    target: |
+      "ငါ မသွားဘူး။ မင်း ဘာပြောပြော ငါ ဂရုမစိုက်ပါဘူး"။
+    note: |
+      Stubborn teen voice: ငါ / မင်း pair, ဘူး negation, "ဘာပြောပြော" idiom
+      for "no matter what you say". Avoid literary "မည်သို့ပင် ပြောစေကာမူ".

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Compare · PDF → Burmese Translation</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header>
+    <nav class="topnav">
+      <a href="/" class="nav-link">← Home</a>
+      <span class="nav-sep">·</span>
+      <a href="/history" class="nav-link">History</a>
+      <span class="nav-sep">·</span>
+      <a href="/compare" class="nav-link active">Compare</a>
+    </nav>
+    <h1 id="page-title">Compare original vs translation</h1>
+    <p class="subtitle" id="page-sub"></p>
+  </header>
+
+  <main class="compare-main">
+    <section class="card" id="auth-required" hidden>
+      <p>No API token saved in this browser. <a href="/">Set one on the home page</a> first.</p>
+    </section>
+
+    <section class="card" id="missing-job" hidden>
+      <p>Provide a <code>?job_id=…</code> query parameter, or <a href="/history">pick a job from the history page</a>.</p>
+    </section>
+
+    <section class="card" id="status-card" hidden>
+      <p id="status-line" class="status">Loading…</p>
+    </section>
+
+    <section id="page-controls" class="compare-controls" hidden>
+      <button id="prev-page" class="secondary">← Prev</button>
+      <span id="page-indicator" class="status"></span>
+      <button id="next-page" class="secondary">Next →</button>
+      <span class="spacer"></span>
+      <label>Jump to: <input type="number" id="page-jump" min="1" style="width:5em" /></label>
+      <button id="page-jump-go" class="secondary">Go</button>
+      <span class="spacer"></span>
+      <label class="hint" style="margin:0"><input type="checkbox" id="sync-scroll" checked /> Sync scroll</label>
+    </section>
+
+    <section id="compare-grid" class="compare-grid" hidden>
+      <div class="compare-pane">
+        <div class="pane-header">
+          <span class="pane-label">Source (English)</span>
+        </div>
+        <div id="src-pane" class="pane-body"></div>
+      </div>
+      <div class="compare-pane">
+        <div class="pane-header">
+          <span class="pane-label">Translation (Burmese)</span>
+        </div>
+        <div id="tgt-pane" class="pane-body burmese"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>API docs: <a href="/docs">/docs</a></p>
+  </footer>
+
+  <script src="/static/compare.js"></script>
+</body>
+</html>

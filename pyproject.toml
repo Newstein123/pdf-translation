@@ -1,0 +1,56 @@
+[project]
+name = "pdf-translation"
+version = "0.1.0"
+description = "Local single-user tool that translates foreign PDFs into Burmese using Gemini, preserving layout and producing PDF + EPUB outputs."
+requires-python = ">=3.11"
+
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0",
+    "pydantic>=2.8.0",
+    "pydantic-settings>=2.4.0",
+    "python-multipart>=0.0.9",
+    "sse-starlette>=2.1.0",
+    "sqlalchemy>=2.0.30",
+    "alembic>=1.13.0",
+    "celery[redis]>=5.4.0",
+    "redis>=5.0.0",
+    "pymupdf>=1.24.0",
+    "pdfplumber>=0.11.0",
+    "pytesseract>=0.3.10",
+    "pillow>=10.3.0",
+    "spacy>=3.7.0",
+    "google-genai>=1.0.0",
+    "reportlab>=4.2.0",
+    "ebooklib>=0.18",
+    "tiktoken>=0.7.0",
+    "httpx>=0.27.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=5.0.0",
+    "ruff>=0.5.0",
+    "mypy>=1.10.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*"]

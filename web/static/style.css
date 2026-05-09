@@ -1,0 +1,626 @@
+:root {
+  --bg: #0f1115;
+  --panel: #1a1d24;
+  --border: #2a2f38;
+  --text: #e8eaed;
+  --muted: #9aa0a6;
+  --accent: #4f8cff;
+  --accent-hover: #6aa1ff;
+  --ok: #4caf50;
+  --warn: #ffb74d;
+  --err: #ef5350;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+header, main, footer {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem;
+}
+
+header h1 { margin: 0 0 0.25rem; font-size: 1.5rem; }
+header .subtitle { color: var(--muted); margin: 0; }
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1rem 0;
+}
+
+.card h2 { margin-top: 0; font-size: 1.1rem; }
+.card h3 { font-size: 1rem; margin: 1.2rem 0 0.5rem; }
+
+.row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 0.5rem 0;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="file"],
+select {
+  background: #0f1115;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  font: inherit;
+  flex: 1 1 240px;
+  min-width: 0;
+}
+
+input[type="file"] { padding: 0.3rem; }
+
+/* ---- Suggestions table (M8 glossary approval UI) ---- */
+
+#suggestions-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+#suggestions-table th,
+#suggestions-table td {
+  padding: 0.6rem 0.7rem;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border);
+}
+#suggestions-table th {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+/* Column widths: prioritize source + Burmese (the things you actually read). */
+#suggestions-table th:nth-child(1),
+#suggestions-table td:nth-child(1) { width: 22%; }
+#suggestions-table th:nth-child(2),
+#suggestions-table td:nth-child(2) { width: 32%; }
+#suggestions-table th:nth-child(3),
+#suggestions-table td:nth-child(3) { width: 12%; }
+#suggestions-table th:nth-child(4),
+#suggestions-table td:nth-child(4) { width: 10%; }
+#suggestions-table th:nth-child(5),
+#suggestions-table td:nth-child(5) { width: 11%; }
+#suggestions-table th:nth-child(6),
+#suggestions-table td:nth-child(6) { width: 13%; text-align: right; padding-right: 0.4rem; }
+
+#suggestions-table tbody tr {
+  transition: background 0.12s;
+}
+#suggestions-table tbody tr:hover {
+  background: rgba(79, 140, 255, 0.05);
+}
+
+/* Source cell — bold + truncate-on-overflow with hover tooltip via title */
+#suggestions-table .col-source {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: help;
+}
+
+/* Editable Burmese input — full-width inside cell, larger text, accent border. */
+#suggestions-table input[type="text"] {
+  width: 100%;
+  flex: none;
+  padding: 0.45rem 0.6rem;
+  background: #14171f;
+  border: 1.5px solid var(--accent);
+  border-radius: 6px;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--text);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+#suggestions-table input[type="text"]:hover {
+  border-color: var(--accent-hover);
+}
+#suggestions-table input[type="text"]:focus {
+  outline: none;
+  border-color: var(--accent-hover);
+  box-shadow: 0 0 0 3px rgba(79, 140, 255, 0.18);
+}
+
+/* Pills — kind + state */
+.pill {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+.pill-kind {
+  background: rgba(154, 160, 166, 0.14);
+  color: var(--muted);
+}
+.pill-state-PENDING  { background: rgba(255, 183, 77, 0.18); color: var(--warn); }
+.pill-state-APPROVED { background: rgba(76, 175, 80, 0.18);  color: var(--ok); }
+.pill-state-REJECTED { background: rgba(154, 160, 166, 0.18); color: var(--muted); }
+.pill-state-MERGED   { background: rgba(79, 140, 255, 0.18); color: var(--accent); }
+
+/* JobStatus pills for the history page. Same .pill-state-X naming so the
+   JS doesn't have to fork between SuggestionState and JobStatus. */
+.pill-state-UPLOADED              { background: rgba(154, 160, 166, 0.18); color: var(--muted); }
+.pill-state-EXTRACTING,
+.pill-state-CLASSIFYING            { background: rgba(79, 140, 255, 0.18); color: var(--accent); }
+.pill-state-AWAITING_CONFIRMATION  { background: rgba(255, 183, 77, 0.18); color: var(--warn); }
+.pill-state-TRANSLATING,
+.pill-state-POSTPROCESSING,
+.pill-state-REBUILDING             { background: rgba(79, 140, 255, 0.22); color: var(--accent-hover); }
+.pill-state-COMPLETED              { background: rgba(76, 175, 80, 0.20);  color: var(--ok); }
+.pill-state-FAILED                 { background: rgba(239, 83, 80, 0.20);  color: var(--err); }
+.pill-state-CANCELLED              { background: rgba(154, 160, 166, 0.18); color: var(--muted); }
+
+/* Confidence bar + numeric */
+.conf {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.conf-bar {
+  display: inline-block;
+  width: 42px;
+  height: 5px;
+  background: rgba(154, 160, 166, 0.2);
+  border-radius: 3px;
+  position: relative;
+  flex: 0 0 auto;
+}
+.conf-bar-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--ok);
+  border-radius: 3px;
+}
+.conf-bar-fill.low  { background: var(--warn); }
+.conf-bar-fill.mid  { background: var(--accent); }
+
+/* Action buttons — inline, compact, right-aligned. Approved/rejected rows
+   show a muted "Undo" placeholder via the absence of buttons. */
+#suggestions-table .actions {
+  display: flex;
+  gap: 0.3rem;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+}
+#suggestions-table .actions button {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.82rem;
+  border-radius: 5px;
+  min-width: 0;
+}
+#suggestions-table .actions button.approve {
+  background: var(--ok);
+}
+#suggestions-table .actions button.approve:hover {
+  background: #5cbe60;
+}
+#suggestions-table .actions button.reject {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+#suggestions-table .actions button.reject:hover {
+  background: rgba(239, 83, 80, 0.12);
+  color: var(--err);
+  border-color: var(--err);
+}
+
+/* Bulk-action header buttons sit above the table */
+.bulk-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.4rem 0 0.6rem;
+}
+
+/* Inline PDF preview — uses the browser's native viewer via the existing
+   download URL (Content-Type: application/pdf). Sized for a comfortable
+   reading width without forcing a separate page navigation. */
+#pdf-preview-container {
+  margin-top: 0.8rem;
+  background: #0f1115;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+#pdf-preview-frame {
+  display: block;
+  width: 100%;
+  height: 80vh;
+  border: 0;
+  background: #fff;
+}
+
+/* Collapsible card (Recent jobs on home, etc.) — uses <details>/<summary>
+   so the user can fold the section away when it's blocking the active job
+   view. Looks like the other .card panels but with a click-to-open header. */
+.collapsible-card > summary {
+  list-style: none;  /* hide default disclosure triangle */
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: -0.25rem 0 0;
+  padding: 0.25rem 0;
+  user-select: none;
+}
+.collapsible-card > summary::-webkit-details-marker { display: none; }
+.collapsible-card > summary::before {
+  content: "▸";
+  display: inline-block;
+  margin-right: 0.5rem;
+  color: var(--muted);
+  transition: transform 0.15s;
+  font-size: 0.85em;
+}
+.collapsible-card[open] > summary::before { transform: rotate(90deg); }
+.collapsible-card .summary-meta {
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+.collapsible-card .summary-meta a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.collapsible-card .summary-meta a:hover { color: var(--accent-hover); }
+.collapsible-card .summary-title { flex: 1; }
+.collapsible-card[open] > .row,
+.collapsible-card[open] > table { margin-top: 0.7rem; }
+
+/* ---- Top navigation (history + compare pages) ---- */
+.topnav {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  margin-bottom: 0.4rem;
+  font-size: 0.92rem;
+}
+.nav-link {
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: background 0.12s, color 0.12s;
+}
+.nav-link:hover { color: var(--text); background: rgba(79, 140, 255, 0.08); }
+.nav-link.active { color: var(--accent); }
+.nav-sep { color: var(--border); }
+
+/* ---- History page ---- */
+
+/* The default <main> max-width (880px) crams 8 columns; widen for history. */
+body.page-history main,
+body.page-history header,
+body.page-history footer {
+  max-width: 1200px;
+}
+
+#history-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+#history-table th, #history-table td {
+  padding: 0.6rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+#history-table th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+/* Column widths: file gets the most room, actions enough for 3 buttons. */
+#history-table th:nth-child(1), #history-table td:nth-child(1) { width: 24%; }
+#history-table th:nth-child(2), #history-table td:nth-child(2) { width: 13%; }
+#history-table th:nth-child(3), #history-table td:nth-child(3) { width: 13%; }
+#history-table th:nth-child(4), #history-table td:nth-child(4) { width: 6%;  text-align: right; }
+#history-table th:nth-child(5), #history-table td:nth-child(5) { width: 9%;  text-align: right; }
+#history-table th:nth-child(6), #history-table td:nth-child(6) { width: 7%;  text-align: right; }
+#history-table th:nth-child(7), #history-table td:nth-child(7) { width: 14%; }
+#history-table th:nth-child(8), #history-table td:nth-child(8) { width: 14%; }
+
+#history-table tbody tr {
+  transition: background 0.12s;
+}
+#history-table tbody tr:hover { background: rgba(79, 140, 255, 0.05); }
+
+#history-table .col-file {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: help;
+}
+#history-table .col-profile {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-family: var(--mono);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#history-table .col-cost {
+  font-variant-numeric: tabular-nums;
+  color: var(--ok);
+  font-weight: 500;
+}
+#history-table td:nth-child(7) {
+  /* Created column — short timestamp line. */
+  color: var(--muted);
+  font-size: 0.82rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Actions cell — wrapper div inside <td> so flex behaves predictably. */
+#history-table .col-actions {
+  text-align: right;
+  white-space: nowrap;
+}
+#history-table .col-actions .actions-row {
+  display: inline-flex;
+  gap: 0.3rem;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+}
+#history-table .col-actions button {
+  padding: 0.3rem 0.65rem;
+  font-size: 0.78rem;
+  border-radius: 5px;
+  min-width: 0;
+}
+
+/* ---- Compare page ---- */
+.compare-main {
+  max-width: 1400px;  /* wider than the default to give both panes air */
+}
+.compare-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+.compare-controls .spacer { flex: 1 1 auto; }
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  height: calc(100vh - 250px);
+  min-height: 500px;
+}
+.compare-pane {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;  /* allow flex children to shrink */
+}
+.pane-header {
+  padding: 0.5rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(79, 140, 255, 0.04);
+}
+.pane-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  font-weight: 600;
+}
+.pane-body {
+  padding: 1rem 1.2rem;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  line-height: 1.55;
+}
+.pane-body.burmese { line-height: 1.7; font-size: 1.02rem; }
+.cmp-block, .cmp-heading {
+  margin: 0.5rem 0;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  transition: background 0.12s, box-shadow 0.12s;
+  cursor: default;
+}
+.cmp-heading {
+  font-size: 1.15em;
+  font-weight: 600;
+  color: var(--text);
+  margin-top: 1.2rem;
+}
+.cmp-untranslated {
+  color: var(--muted);
+  font-style: italic;
+}
+.cmp-active {
+  background: rgba(79, 140, 255, 0.1);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+button {
+  background: var(--accent);
+  color: white;
+  border: 0;
+  padding: 0.5rem 0.9rem;
+  border-radius: 6px;
+  font: inherit;
+  cursor: pointer;
+}
+button:hover { background: var(--accent-hover); }
+button.secondary { background: transparent; border: 1px solid var(--border); color: var(--text); }
+button.primary { background: var(--ok); }
+button.primary:hover { background: #66bb6a; }
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.hint { color: var(--muted); margin: 0.25rem 0 0.6rem; font-size: 0.92rem; }
+.status { color: var(--muted); margin: 0.4rem 0; font-family: var(--mono); font-size: 0.9rem; }
+.status.ok { color: var(--ok); }
+.status.warn { color: var(--warn); }
+.status.err { color: var(--err); }
+
+code { font-family: var(--mono); background: #0f1115; padding: 0.05rem 0.3rem; border-radius: 4px; }
+
+dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.25rem 1rem; font-family: var(--mono); font-size: 0.92rem; margin: 0.4rem 0 1rem; }
+dt { color: var(--muted); }
+dd { margin: 0; }
+
+progress {
+  width: 100%;
+  height: 14px;
+  appearance: none;
+  -webkit-appearance: none;
+}
+progress::-webkit-progress-bar { background: var(--border); border-radius: 8px; }
+progress::-webkit-progress-value { background: var(--accent); border-radius: 8px; }
+
+details { margin-top: 0.75rem; }
+details > summary { cursor: pointer; color: var(--muted); }
+
+#event-log {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  list-style: none;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  background: #0f1115;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+#event-log li { padding: 0.15rem 0; border-bottom: 1px solid #1f242c; }
+#event-log li:last-child { border-bottom: 0; }
+#event-log .evt-name { color: var(--accent); }
+#event-log .evt-time { color: var(--muted); margin-right: 0.5rem; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  margin-top: 0.5rem;
+}
+th, td { padding: 0.3rem 0.5rem; border-bottom: 1px solid var(--border); text-align: left; }
+th { color: var(--muted); font-weight: normal; }
+td.status-COMPLETED { color: var(--ok); }
+td.status-FAILED { color: var(--err); }
+td.status-IN_PROGRESS, td.status-PENDING, td.status-RETRY { color: var(--warn); }
+
+#outputs-list { list-style: none; padding: 0; }
+#outputs-list li { margin: 0.25rem 0; }
+
+footer { color: var(--muted); font-size: 0.9rem; }
+footer a { color: var(--accent); }
+
+/* M14 — book metadata edit grid.
+ * The global ``input[type="text"]`` rule sets ``flex: 1 1 240px``. With a
+ * column-direction flex parent that 240px becomes vertical height — which
+ * is why the inputs were rendering as huge text boxes. Override flex sizing
+ * and pin the height so the inputs look like normal single-line fields. */
+.metadata-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 1rem;
+  margin: 0.5rem 0 0.75rem;
+}
+.metadata-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.metadata-grid input[type="text"] {
+  flex: 0 0 auto;
+  height: 2rem;
+  padding: 0.3rem 0.5rem;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: inherit;
+  line-height: 1.2;
+}
+.metadata-grid input[type="text"]:focus {
+  outline: 1px solid var(--accent);
+  border-color: var(--accent);
+}
+/* Number inputs and selects inside the metadata grid need the same
+ * size override — the global rule sets ``flex: 1 1 240px`` which
+ * stretches them vertically when the parent is a column flex. */
+.metadata-grid input[type="number"],
+.metadata-grid select {
+  flex: 0 0 auto;
+  height: 2rem;
+  padding: 0.3rem 0.5rem;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: inherit;
+  line-height: 1.2;
+}
+.metadata-grid input[type="number"]:focus,
+.metadata-grid select:focus {
+  outline: 1px solid var(--accent);
+  border-color: var(--accent);
+}
+@media (max-width: 600px) {
+  .metadata-grid { grid-template-columns: 1fr; }
+}
+
+/* Two-phase config UX — pre-translation = translation settings, post-translation = PDF export settings. */
+.phase-hint {
+  background: rgba(79, 140, 255, 0.08);
+  border-left: 3px solid var(--accent);
+  padding: 0.6rem 0.85rem;
+  margin: 0 0 1rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+.phase-hint strong { color: var(--accent); }
+.phase-hint em { color: var(--text); font-style: normal; font-weight: 600; }

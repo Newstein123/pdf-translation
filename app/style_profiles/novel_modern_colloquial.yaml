@@ -1,0 +1,59 @@
+key: novel_modern_colloquial
+name: "Novel — Modern Colloquial"
+description: "Natural contemporary Burmese for mainstream modern fiction. Dialogue feels spoken."
+applies_to_category: NOVEL
+sentence_complexity: MEDIUM
+is_default_for_category: false
+
+vocabulary_preferences:
+  pali_sanskrit_loanwords: balanced
+  formality: medium
+  archaic_diction_ok: false
+  honorifics: contemporary
+  contractions: ok_in_dialogue
+  idioms: prefer_burmese_equivalents
+
+system_prompt_template: |
+  Style profile: Modern Colloquial novel.
+
+  Voice and register:
+  - Write in natural, contemporary Burmese — the kind a literate adult reader
+    would expect from a mainstream modern novel.
+  - Sentence rhythm should feel *spoken* and *thought*, not stately. Shorter
+    sentences are fine; rhythm matters more than length.
+  - Use everyday vocabulary where the source uses everyday vocabulary, and
+    elevated vocabulary only when the source elevates.
+  - Avoid both archaic Pali/Sanskrit register *and* English-flavored syntax.
+
+  Dialogue:
+  - Dialogue should sound like real people talking. Use the conversational
+    particles, sentence-final markers, and contractions that Burmese speakers
+    actually use.
+  - Forms of address follow contemporary social conventions, not classical ones.
+
+few_shot_examples:
+  - source: |
+      Edam said, "You're really angry. Let's continue tomorrow."
+    target: |
+      "မင်းအရမ်းစိတ်တိုနေတယ်။ နောက်နေ့မှ ဆက်ပြောရအောင်" လို့ အီဒမ်က ပြောလိုက်တယ်။
+    note: |
+      Demonstrates the core dialogue rule: inside the quotes, spoken Burmese
+      (မင်း, တယ်, စိတ်တို) — NOT literary သင်/သည် or Pali-flavored ဒေါသထွက်.
+      Speakers are peers here, so မင်း / ငါ register. Narration tag uses
+      contemporary spoken register (ပြောလိုက်တယ်) consistent with this profile.
+  - source: |
+      "I don't know," she said. "I just don't think it matters anymore."
+    target: |
+      "မသိဘူး" လို့ သူမက ပြောတယ်။ "အခုတော့ ဘာမှ အရေးမကြီးတော့ဘူးလို့ပဲ ထင်တယ်"။
+    note: |
+      Hedged colloquial dialogue: ဘူး negation, တယ် sentence-final, ပဲ
+      emphasis, တော့ "anymore". Avoids stiff alternatives like
+      "မည်သို့မျှ မသိပါ" or "အရေးမကြီးတော့ပေ".
+  - source: |
+      "Are you coming or not?" he asked, half-laughing. "I can't wait all night."
+    target: |
+      "လာမလား မလာဘူးလား" လို့ သူက တစ်ဝက်တစ်ပျက် ရယ်ရင်း မေးတယ်။ "တစ်ညလုံး စောင့်လို့ မရဘူး"။
+    note: |
+      Yes/no question with the spoken pair မလား … မလာဘူးလား. Negation as
+      "မရဘူး" not literary "မရပေ". Emotional texture (half-laughing) carried
+      by ရင်း without overwriting the source.

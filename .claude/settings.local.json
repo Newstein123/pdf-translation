@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.venv/bin/pytest -x -q)",
+      "Bash(.venv/bin/pytest tests/integration/test_rebuild_pipeline.py::test_rebuild_task_produces_pdf_and_epub -q)",
+      "Bash(curl -fsS http://127.0.0.1:8000/health)",
+      "Bash(.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000)"
+    ]
+  }
+}

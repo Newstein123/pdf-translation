@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PDF → Burmese Translation</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header>
+    <nav class="topnav">
+      <a href="/" class="nav-link active">Home</a>
+      <span class="nav-sep">·</span>
+      <a href="/history" class="nav-link">History</a>
+    </nav>
+    <h1>PDF → Burmese Translation</h1>
+    <p class="subtitle">Local single-user tool. Powered by Gemini.</p>
+  </header>
+
+  <main>
+    <section id="auth-section" class="card">
+      <h2>1. API token</h2>
+      <p class="hint">Stored only in your browser (localStorage). Must match <code>API_BEARER_TOKEN</code> in <code>.env</code>.</p>
+      <div class="row">
+        <input type="password" id="token-input" placeholder="your-bearer-token" autocomplete="off" />
+        <button id="save-token">Save</button>
+        <button id="clear-token" class="secondary">Clear</button>
+      </div>
+      <p id="token-status" class="status"></p>
+    </section>
+
+    <section id="upload-section" class="card" hidden>
+      <h2>2. Upload PDF</h2>
+      <div class="row">
+        <input type="file" id="pdf-file" accept="application/pdf" />
+        <button id="upload-btn">Upload</button>
+      </div>
+      <div class="row">
+        <label for="upload-profile-select">Style profile (optional):</label>
+        <select id="upload-profile-select">
+          <option value="">Auto — pick the default after classification</option>
+        </select>
+      </div>
+      <details>
+        <summary>Advanced (chunk size)</summary>
+        <p class="hint">Smaller chunks = better quality + higher cost. Defaults are 1500 target / 2000 hard cap.</p>
+        <div class="row">
+          <label>Target tokens: <input type="number" id="chunk-target-tokens" min="200" max="8000" placeholder="1500" /></label>
+          <label>Hard cap: <input type="number" id="chunk-hard-cap-tokens" min="400" max="12000" placeholder="2000" /></label>
+        </div>
+      </details>
+      <p id="upload-status" class="status"></p>
+    </section>
+
+    <details id="history-section" class="card collapsible-card" hidden>
+      <summary>
+        <span class="summary-title">Recent jobs</span>
+        <span class="summary-meta"><a href="/history">view all →</a></span>
+      </summary>
+      <div class="row">
+        <button id="refresh-history" class="secondary">Refresh</button>
+      </div>
+      <table id="history-table">
+        <thead><tr><th>Created</th><th>File</th><th>Status</th><th>Pages</th><th>Tokens</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </details>
+
+    <section id="job-section" class="card" hidden>
+      <h2>3. Job <button id="forget-job" class="secondary" style="float:right">Forget</button></h2>
+      <dl id="job-details"></dl>
+
+      <div id="confirm-block" hidden>
+        <p class="phase-hint">
+          <strong>Step 1 — Translation settings.</strong>
+          Confirm what gets translated and how. PDF formatting (cover, title, fonts, page size) happens after translation finishes.
+        </p>
+
+        <h3>Skip pages <span style="font-weight: normal; color: var(--muted); font-size: 0.85em">(optional)</span></h3>
+        <p class="hint">Pages listed here are <strong>not translated</strong> (saves Gemini tokens) and <strong>don't appear in the final PDF</strong>. Format: <code>1-3, 5, 8-10</code>. Use for copyright pages, blank pages, publisher boilerplate, etc.</p>
+        <div class="row">
+          <input type="text" id="meta-skip-pages" placeholder="e.g. 1-3, 5, 8-10" style="flex: 1; min-width: 0;" />
+          <button id="save-metadata">Save</button>
+        </div>
+        <p id="metadata-status" class="status"></p>
+
+        <h3>Estimated cost <button id="refresh-cost" class="secondary" style="float:right">Refresh</button></h3>
+        <p class="hint">Forward estimate from the extracted source text. Actual cost will be tracked during translation and shown in the job details. Rates default to Gemini 2.5 published prices — verify on cloud.google.com.</p>
+        <div id="cost-panel">
+          <div id="cost-summary" class="status">Calculating…</div>
+          <table id="cost-scenarios-table">
+            <thead><tr><th>Scenario</th><th>Tokens</th><th>USD</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <h3>Confirm category</h3>
+        <p class="hint">The classifier suggested a category. Confirm or override before starting translation.</p>
+        <div class="row">
+          <select id="category-select">
+            <option value="NOVEL">NOVEL — fluent literary tone</option>
+            <option value="EDUCATIONAL">EDUCATIONAL — formal, terminology-strict</option>
+            <option value="PERSONAL_DEVELOPMENT">PERSONAL_DEVELOPMENT — self-help / business / mindset</option>
+          </select>
+          <button id="save-category">Save category</button>
+        </div>
+
+        <h3>Style profile <span style="font-weight: normal; color: var(--muted); font-size: 0.85em">(optional)</span></h3>
+        <p class="hint">Profiles tune register, vocabulary, and dialogue style. Skip this — the category-specific base prompt and translator voice card already carry the styling. PERSONAL_DEVELOPMENT has no scoped profile yet; pick "(none)".</p>
+        <div class="row">
+          <select id="profile-select"></select>
+          <button id="save-profile">Save profile</button>
+        </div>
+        <p id="profile-status" class="status"></p>
+
+        <h3>Glossary suggestions <button id="rerun-suggestions" class="secondary" style="float:right">Re-run</button></h3>
+        <p class="hint">Auto-proposed terms from your document. <strong>Edit the Burmese field before approving</strong> if the proposed rendering isn't right — your edit becomes the locked translation. Hover the Source cell to see the evidence snippets the suggester used.</p>
+        <div id="suggestions-bulk-actions" class="bulk-actions" hidden>
+          <button id="approve-all-suggestions" class="secondary">Approve all pending</button>
+          <button id="reject-all-suggestions" class="secondary">Reject all pending</button>
+        </div>
+        <table id="suggestions-table">
+          <thead><tr><th>Source</th><th>Burmese</th><th>Kind</th><th>Confidence</th><th>State</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <p id="suggestions-status" class="status"></p>
+
+        <h3>Glossary upload (optional)</h3>
+        <p class="hint">JSON / CSV. <code>[{"term":"...","translation":"..."}]</code> or <code>{"term":"translation",...}</code>. Manual entries override suggestions on conflict.</p>
+        <div class="row">
+          <input type="file" id="glossary-file" accept=".json,.csv,application/json,text/csv" />
+          <button id="upload-glossary">Upload glossary</button>
+        </div>
+        <p id="glossary-status" class="status"></p>
+
+        <button id="start-btn" class="primary">Start translation</button>
+      </div>
+
+      <div id="progress-block" hidden>
+        <h3>Progress</h3>
+        <progress id="progress-bar" max="100" value="0"></progress>
+        <p id="progress-label" class="status"></p>
+        <div class="row">
+          <button id="cancel-btn" class="secondary">Cancel</button>
+          <button id="resume-btn" class="secondary">Resume</button>
+        </div>
+        <details>
+          <summary>Event log</summary>
+          <ul id="event-log"></ul>
+        </details>
+        <details>
+          <summary>Chunks</summary>
+          <table id="chunks-table">
+            <thead><tr><th>#</th><th>Pages</th><th>Tokens</th><th>Status</th><th>Attempts</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </details>
+      </div>
+
+      <details id="preview-panel">
+        <summary>Page preview (typography QA)</summary>
+        <p class="hint">Render a single translated page as PDF to verify Burmese shaping + line-height before downloading the full output.</p>
+        <div class="row">
+          <label>Page: <input type="number" id="preview-page-num" min="1" value="1" style="width:5em" /></label>
+          <button id="preview-page-btn" class="secondary">Preview page</button>
+        </div>
+        <p id="preview-status" class="status"></p>
+      </details>
+
+      <details id="quality-panel">
+        <summary>Quality (M9)</summary>
+        <div id="quality-summary" class="status"></div>
+        <table id="review-queue-table">
+          <thead><tr><th>Chunk</th><th>Overall</th><th>Naturalness</th><th>Fidelity</th><th>Register</th><th>Consistency</th><th>Issues</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <p class="hint">Review queue = chunks below the low-score threshold. Worst first.</p>
+      </details>
+
+      <div id="done-block" hidden>
+        <div id="outputs-section" hidden>
+          <h3>Outputs</h3>
+          <ul id="outputs-list"></ul>
+          <div class="row">
+            <button id="toggle-preview">Preview PDF</button>
+            <button id="open-compare" class="secondary">Compare original ↔ translation</button>
+          </div>
+        </div>
+
+        <p class="phase-hint" style="margin-top: 1.25rem;">
+          <strong>Step 2 — PDF export settings.</strong>
+          Tune how the translated PDF will look. Set these <em>during</em> translation
+          and the first export uses them; otherwise edit any time and click
+          <em>Re-export PDF</em> to regenerate. None of these touch Gemini.
+        </p>
+
+        <h3>Book metadata</h3>
+        <p class="hint">Title and author appear in the running header / cover of the exported PDF.</p>
+        <div class="metadata-grid">
+          <label>Title (source)
+            <input type="text" id="post-title-source" placeholder="The Time Machine" />
+          </label>
+          <label>Title (Burmese)
+            <input type="text" id="post-title-target" placeholder="ကာလယန္တရား" />
+          </label>
+          <label>Author (source)
+            <input type="text" id="post-author-source" placeholder="H. G. Wells" />
+          </label>
+          <label>Author (Burmese)
+            <input type="text" id="post-author-target" placeholder="အိပ်ချ် ဂျီ ဝဲလ်စ်" />
+          </label>
+        </div>
+
+        <h3>Cover image <span style="font-weight: normal; color: var(--muted); font-size: 0.85em">(optional)</span></h3>
+        <p class="hint">Uploaded cover renders as page 1 of the exported PDF. Aspect-fit. Accepts JPG, PNG, WEBP.</p>
+        <div class="row" style="align-items: flex-start;">
+          <div style="flex: 1; min-width: 0;">
+            <input type="file" id="cover-file" accept="image/*" />
+            <button id="upload-cover" class="secondary">Upload cover</button>
+            <button id="delete-cover" class="secondary" hidden>Remove cover</button>
+            <p id="cover-status" class="status"></p>
+          </div>
+          <img id="cover-preview" alt="Cover preview" hidden
+               style="max-width: 110px; max-height: 150px; border: 1px solid var(--border); border-radius: 4px;" />
+        </div>
+
+        <h3>Layout mode</h3>
+        <p class="hint">AUTO picks based on the source: white-paper books → clean Burmese template, anything with color/images → preserve original layout.</p>
+        <div class="row">
+          <select id="post-layout-mode-select">
+            <option value="AUTO">AUTO — let the system pick</option>
+            <option value="TEMPLATE">TEMPLATE — clean Burmese book template</option>
+            <option value="PRESERVE">PRESERVE — keep original layout</option>
+          </select>
+        </div>
+
+        <h3>Typography (TEMPLATE mode only)</h3>
+        <p class="hint">Defaults match a typical Burmese paperback. Override per-job below if you want a different look.</p>
+        <div class="metadata-grid">
+          <label>Page size
+            <select id="post-page-size">
+              <option value="">(default — A5)</option>
+              <option value="A5">A5</option>
+              <option value="A4">A4</option>
+              <option value="LETTER">Letter</option>
+              <option value="6X9">6×9″</option>
+            </select>
+          </label>
+          <label>Body font size (pt)
+            <input type="number" id="post-body-font-size" min="8" max="14" step="0.5" placeholder="10" />
+          </label>
+          <label>Line height
+            <input type="number" id="post-line-height" min="1.0" max="2.2" step="0.05" placeholder="1.5" />
+          </label>
+          <label>Margin (mm)
+            <input type="number" id="post-margin-mm" min="8" max="40" step="1" placeholder="14" />
+          </label>
+        </div>
+        <div class="row" style="margin-top: 0.25rem;">
+          <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: var(--muted);">
+            <input type="checkbox" id="post-justify" />
+            Justify body text (full page width)
+          </label>
+        </div>
+
+        <h3>Skip pages <span style="font-weight: normal; color: var(--muted); font-size: 0.85em">(optional)</span></h3>
+        <p class="hint">Same as Step 1 — pages here are dropped from the re-exported PDF. (Pages already translated remain in the database; only the export changes.)</p>
+        <input type="text" id="post-skip-pages" placeholder="e.g. 1-3, 5, 8-10"
+               style="padding:0.4rem 0.6rem; height:2rem; width:100%;
+                      background:var(--bg); color:var(--text); border:1px solid var(--border);
+                      border-radius:4px; font-size:13px; font-family:inherit; line-height:1.2;" />
+
+        <div class="row" style="margin-top: 0.75rem;">
+          <button id="post-save-metadata">Save</button>
+          <button id="post-re-export" class="primary">Re-export PDF</button>
+        </div>
+        <p id="post-metadata-status" class="status"></p>
+        <div id="pdf-preview-container" hidden>
+          <iframe
+            id="pdf-preview-frame"
+            title="Translated PDF preview"
+            src=""
+            loading="lazy"></iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>API docs: <a href="/docs">/docs</a></p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

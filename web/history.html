@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>History · PDF → Burmese Translation</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body class="page-history">
+  <header>
+    <nav class="topnav">
+      <a href="/" class="nav-link">← Home</a>
+      <span class="nav-sep">·</span>
+      <a href="/history" class="nav-link active">History</a>
+    </nav>
+    <h1>Translation history</h1>
+    <p class="subtitle">Every book you've processed. Click to open the active job, or compare side-by-side.</p>
+  </header>
+
+  <main>
+    <section class="card" id="auth-required" hidden>
+      <h2>API token required</h2>
+      <p class="hint">No token saved in this browser. <a href="/">Set one on the home page</a> first.</p>
+    </section>
+
+    <section class="card" id="filters" hidden>
+      <div class="row">
+        <input type="search" id="filter-text" placeholder="Filter by filename…" />
+        <select id="filter-status">
+          <option value="">All statuses</option>
+          <option>UPLOADED</option>
+          <option>EXTRACTING</option>
+          <option>CLASSIFYING</option>
+          <option>AWAITING_CONFIRMATION</option>
+          <option>TRANSLATING</option>
+          <option>POSTPROCESSING</option>
+          <option>REBUILDING</option>
+          <option>COMPLETED</option>
+          <option>FAILED</option>
+          <option>CANCELLED</option>
+        </select>
+        <button id="refresh" class="secondary">Refresh</button>
+      </div>
+      <p id="summary" class="status"></p>
+    </section>
+
+    <section class="card" id="history-card" hidden>
+      <table id="history-table">
+        <thead>
+          <tr>
+            <th>File</th>
+            <th>Status</th>
+            <th>Profile</th>
+            <th>Pages</th>
+            <th>Tokens</th>
+            <th>Cost</th>
+            <th>Created</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="row" style="margin-top:0.6rem">
+        <button id="load-more" class="secondary" hidden>Load more</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>API docs: <a href="/docs">/docs</a></p>
+  </footer>
+
+  <script src="/static/history.js"></script>
+</body>
+</html>
